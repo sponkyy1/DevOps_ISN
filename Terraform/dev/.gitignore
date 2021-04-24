@@ -1,0 +1,6 @@
+provider.tf
+.terraform
+*.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+Credential.txt
