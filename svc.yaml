@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: "2021-05-11T13:42:50Z"
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  name: devops-for-isn
+  namespace: default
+  resourceVersion: "713"
+  selfLink: /api/v1/namespaces/default/services/devops-for-isn
+  uid: 219b1f04-8210-4fed-957b-71f7ce906ac3
+spec:
+  clusterIP: 10.0.210.144
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30240
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    test: DevOpsNginxExample
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 51.138.64.251

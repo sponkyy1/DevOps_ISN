@@ -1,0 +1,11 @@
+---
+- name: Install Apache WebServer
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install Apache WebServer
+    apt:  name=httpd state=latest
+
+  - name: Start Apache
+    service: name=httpd state=started enabled=yes
