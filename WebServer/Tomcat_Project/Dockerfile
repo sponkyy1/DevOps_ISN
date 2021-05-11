@@ -4,7 +4,6 @@ RUN apt-get update && apt-get -y upgrade
 
 LABEL maintainer="yurii.zhuravchak.itis.2019@lpnu.ua"
 
-
 RUN mkdir /opt/tomcat/
 
 WORKDIR /opt/tomcat
@@ -14,7 +13,6 @@ RUN mv apache-tomcat-9.0.45/* /opt/tomcat/.
 
 ADD dev.war /opt/tomcat/webapps/
 WORKDIR /opt/tomcat/webapps/
-
 
 EXPOSE 8080
 
