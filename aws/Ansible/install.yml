@@ -1,0 +1,83 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: "apt update && apt upgrade"
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Install git
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+
+  - name: Install nginx
+    apt:
+      name: nginx
+      state: present
+      update_cache: yes
+
+  - name: Update all Ubuntu packages
+    apt:
+      upgrade: "dist"
+      update_cache: yes
+    when: ansible_distribution == 'Ubuntu'
+
+  - name: Install required Ubuntu packages
+    apt:
+      name: "{{ packages }}"
+      state: present
+      update_cache: yes
+    vars:
+      packages:
+        - openjdk-8-jdk
+  - name: "apt update"
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+      
+  - name: Install docker.io
+    apt:
+      name: docker.io
+      state: present
+      update_cache: yes
+      
+  - name: Install python
+    action: shell apt install python3 -y
+  - name: Install python3-pip
+    action: shell apt install python3-pip -y
+  - name: Install docker
+    action: shell pip3 install docker docker-compose
+
+  - name: Install jenkins
+    action: shell sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+  - name: Install jenkinss
+    action: shell sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+  - name: Install jenkins
+    apt:
+      name: jenkins
+      state: present
+      update_cache: yes
+
+  - name: Install ansible
+    apt:
+      name: ansible
+      state: present
+      update_cache: yes
+  - name: Install Sshpass
+    apt:
+      name: sshpass
+      state: present
+      update_cache: yes
+  - name: Set up Ansible_1
+    lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '#host_key_checking = False'
+      line: 'host_key_checking = False'
+  - name: Set up Ansible_2
+    lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '#inventory      = /etc/ansible/hosts'
+      line: 'inventory      = /etc/ansible/hosts'

@@ -1,0 +1,5 @@
+.terraform-dev
+.terraform
+provider.tf
+*.tfvars
+terraform.pem
