@@ -1,0 +1,41 @@
+pipeline {
+    environment {
+        dockerImage = ''
+        registry = 'sponky214/nginx-back'
+        registryCredential = 'dockerhub_id'
+    }
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sponkyy1/isn-lab-9.git']]])
+            }
+        }
+        
+        stage('Build Docker image') {
+            steps {
+                dir('./Docker/back') {
+                    script {
+                        dockerImage = docker.build registry
+                    }
+                }
+            }
+        }
+        
+        stage('Uploading Image') {
+            steps {
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+        
+        stage('Execute Ansible') {
+            steps {
+                ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible', inventory: './Ansible/hosts', playbook: './Ansible/install_1.yml'
+            }
+        }
+    }
+}
