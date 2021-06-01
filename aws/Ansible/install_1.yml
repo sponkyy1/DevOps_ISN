@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: "apt update && apt upgrade"
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Install docker.io
+    apt:
+      name: docker.io
+      state: present
+      update_cache: yes
+  - name: Install python
+    action: shell apt install python3 -y
+  - name: Install python3-pip
+    action: shell apt install python3-pip -y
+  - name: Install docker
+    action: shell pip3 install docker docker-compose
+
+  - name: Create container
+    docker_container:
+      name: "mynginx"
+      image: "sponky214/nginx-back"
+      ports:
+        - "80:80"
